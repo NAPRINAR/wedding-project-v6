@@ -300,17 +300,20 @@ function armAutoplayFallback(audio) {
 }
 
 /* ---------------- Intro envelope gate ----------------
-   Shows on every visit (not just once per visitor) — the envelope is the
+   Mobile only — desktop visitors skip straight to the hero. Shows on
+   every visit (not just once per visitor) — the envelope is the
    permanent front door of the site, not a one-time welcome. */
 // Set to false to skip the envelope-opening gate on site entry.
 const ENVELOPE_GATE_ENABLED = true;
+const ENVELOPE_GATE_QUERY = '(max-width: 560px)';
 
 function initIntro(audio) {
   const intro = document.getElementById('intro');
   const envelope = document.querySelector('.envelope');
+  const isMobile = window.matchMedia(ENVELOPE_GATE_QUERY).matches;
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (!ENVELOPE_GATE_ENABLED || prefersReduced) {
+  if (!ENVELOPE_GATE_ENABLED || !isMobile || prefersReduced) {
     intro.hidden = true;
     playHeroEntrance();
     audio.play().catch(() => armAutoplayFallback(audio));
@@ -330,11 +333,12 @@ function initIntro(audio) {
       // #intro is just a fixed overlay on top of the real page, so once the
       // flaps scale away and the face/seal fade out, the actual hero is
       // already sitting there to reveal — no separate grow/reveal step needed.
+      // Timeout matches the 1.3s flap animation plus a small buffer.
       setTimeout(() => {
         intro.hidden = true;
         document.body.style.overflow = '';
         playHeroEntrance();
-      }, 1100);
+      }, 1450);
     },
     { once: true }
   );
