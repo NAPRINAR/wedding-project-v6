@@ -299,67 +299,18 @@ function armAutoplayFallback(audio) {
   events.forEach((ev) => document.addEventListener(ev, handler));
 }
 
-/* ---------------- Monogram intro gate (mobile only) ----------------
-   A lighter alternative to the envelope gate: big overlapping N/M
-   monogram over the hero photo, one outline button. Mobile-only per
-   request — desktop skips straight past it, same as when disabled. */
-const MONOGRAM_INTRO_KEY = 'wedding-monogram-intro-seen';
-const MONOGRAM_INTRO_QUERY = '(max-width: 560px)';
-
-// Set to false to go back to showing the intro only once per visitor
-// (normal behavior, via localStorage). Left true while the design is
-// still being reviewed on reload — flip back per request.
-const MONOGRAM_INTRO_ALWAYS_SHOW = true;
-
-function initMonogramIntro(audio) {
-  const intro = document.getElementById('monogramIntro');
-  const isMobile = window.matchMedia(MONOGRAM_INTRO_QUERY).matches;
-  const seen = !MONOGRAM_INTRO_ALWAYS_SHOW && localStorage.getItem(MONOGRAM_INTRO_KEY);
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (!isMobile || seen || prefersReduced) {
-    intro.hidden = true;
-    return false;
-  }
-
-  intro.hidden = false;
-  document.body.style.overflow = 'hidden';
-
-  document.getElementById('monogramBtn').addEventListener(
-    'click',
-    () => {
-      audio.play().catch(() => {}); // runs inside the click handler, so it satisfies autoplay policies
-      intro.classList.add('is-leaving');
-      setTimeout(() => {
-        intro.hidden = true;
-        document.body.style.overflow = '';
-        localStorage.setItem(MONOGRAM_INTRO_KEY, '1');
-        playHeroEntrance();
-      }, 1100);
-    },
-    { once: true }
-  );
-
-  return true;
-}
-
-/* ---------------- Intro envelope gate ---------------- */
-const INTRO_KEY = 'wedding-intro-seen';
-
-// Set to true to bring back the envelope-opening gate on site entry.
-// Disabled per request while it's being reworked/reconsidered — the click
-// handler and grow animation below are left in place, just unreachable.
-const ENVELOPE_GATE_ENABLED = false;
+/* ---------------- Intro envelope gate ----------------
+   Shows on every visit (not just once per visitor) — the envelope is the
+   permanent front door of the site, not a one-time welcome. */
+// Set to false to skip the envelope-opening gate on site entry.
+const ENVELOPE_GATE_ENABLED = true;
 
 function initIntro(audio) {
-  if (initMonogramIntro(audio)) return;
-
   const intro = document.getElementById('intro');
   const envelope = document.querySelector('.envelope');
-  const seen = localStorage.getItem(INTRO_KEY);
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (!ENVELOPE_GATE_ENABLED || seen || prefersReduced) {
+  if (!ENVELOPE_GATE_ENABLED || prefersReduced) {
     intro.hidden = true;
     playHeroEntrance();
     audio.play().catch(() => armAutoplayFallback(audio));
@@ -373,45 +324,17 @@ function initIntro(audio) {
     'click',
     () => {
       envelope.disabled = true;
-      envelope.classList.add('is-open');
+      intro.classList.add('is-opening');
       audio.play().catch(() => {}); // runs inside the click handler, so it satisfies autoplay policies
 
-      setTimeout(() => {
-        intro.classList.add('is-leaving');
-
-        // Grow a plain fixed-position box from the letter's real on-screen
-        // position to fill the viewport exactly (top/left/width/height, not
-        // transform:scale) — immune to nested transform/perspective contexts,
-        // so it reliably reaches all four edges regardless of where the small
-        // envelope happens to sit.
-        const slot = document.querySelector('.envelope__slot');
-        const grow = document.getElementById('introGrow');
-        const rect = slot.getBoundingClientRect();
-
-        grow.style.top = `${rect.top}px`;
-        grow.style.left = `${rect.left}px`;
-        grow.style.width = `${rect.width}px`;
-        grow.style.height = `${rect.height}px`;
-        grow.style.borderRadius = '3px';
-        grow.classList.add('is-active');
-
-        grow.getBoundingClientRect(); // force layout before changing the target values
-
-        requestAnimationFrame(() => {
-          grow.style.top = '0px';
-          grow.style.left = '0px';
-          grow.style.width = '100vw';
-          grow.style.height = '100vh';
-          grow.style.borderRadius = '0px';
-        });
-      }, 930);
-
+      // #intro is just a fixed overlay on top of the real page, so once the
+      // flaps scale away and the face/seal fade out, the actual hero is
+      // already sitting there to reveal — no separate grow/reveal step needed.
       setTimeout(() => {
         intro.hidden = true;
         document.body.style.overflow = '';
-        localStorage.setItem(INTRO_KEY, '1');
         playHeroEntrance();
-      }, 2130);
+      }, 1100);
     },
     { once: true }
   );
