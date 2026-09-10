@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="hy">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#3B3542" />
+  <title>Նարեկ &amp; Մոնիկա | 26.10.2026</title>
+  <meta name="description" content="Հրավիրում ենք Ձեզ Նարեկի և Մոնիկայի հարսանիքին՝ 26.10.2026" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Armenian:ital,wght@0,400;0,500;0,600;1,500&family=Noto+Serif:ital,wght@0,500;1,500&family=Noto+Sans+Armenian:wght@300;400;500;600&family=Noto+Sans:wght@300;400;500;600&family=Alex+Brush&family=Pinyon+Script&family=Montserrat:wght@300&family=Julius+Sans+One&display=swap" rel="stylesheet">
+  <!-- Loaded as a real blocking stylesheet (not just the JS import in
+       main.js) so the page has its styling on first paint — without this,
+       Vite's dev server injects CSS via JS after the module graph runs,
+       which briefly shows unstyled content on reload. -->
+  <link rel="stylesheet" href="/src/style.css">
+  <style>
+    /* Critical anti-flash CSS: the full intro/envelope styling, duplicated here so it applies
+       from the very first paint. Vite dev injects the main stylesheet via JS, which can lag a
+       frame or more behind first paint (and browser caching can lag further) — without this,
+       the envelope briefly renders unstyled (or with a stale cached stylesheet). The external
+       stylesheet carries the authoritative copy for normal editing; this block only needs to
+       stay in sync when the intro/envelope rules change. */
+    #intro {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      overflow: hidden;
+    }
+    #intro .intro__bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 45%, #E9D9AE 0%, #B48A4E 42%, #4a3a22 78%, #241a10 100%);
+    }
+    #intro .intro__bg-fade {
+      position: absolute;
+      inset: 0;
+      background: #FBF8F2;
+      opacity: 0;
+      transition: opacity 1.1s cubic-bezier(.4,0,.2,1);
+    }
+    #intro.is-leaving .intro__bg-fade { opacity: 1; }
+    #intro[hidden] { display: none; }
+    .intro__grow {
+      position: fixed;
+      background: #FBF8F2;
+      box-shadow: 0 10px 20px rgba(30, 20, 10, 0.2);
+      opacity: 0;
+      z-index: 5;
+      pointer-events: none;
+      transition: top 1.1s cubic-bezier(.4,0,.2,1), left 1.1s cubic-bezier(.4,0,.2,1),
+                  width 1.1s cubic-bezier(.4,0,.2,1), height 1.1s cubic-bezier(.4,0,.2,1),
+                  border-radius 1.1s cubic-bezier(.4,0,.2,1);
+    }
+    .intro__grow.is-active { opacity: 1; }
+    .envelope {
+      position: relative;
+      z-index: 1;
+      width: min(78vw, 380px);
+      aspect-ratio: 300 / 200;
+      border: none;
+      background: none;
+      padding: 0;
+      cursor: pointer;
+      filter: drop-shadow(0 18px 34px rgba(0,0,0,0.4));
+      animation: envelopeBreathe 3.6s ease-in-out infinite;
+    }
+    @keyframes envelopeBreathe {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-6px) scale(1.015); }
+    }
+    .envelope__card { position: absolute; inset: 0; overflow: hidden; border-radius: 3%; }
+    .envelope__body { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .envelope__flap-wrap {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+      transition: opacity 0.4s ease;
+    }
+    .envelope__flap { display: block; width: 100%; height: 100%; }
+    .envelope__flap-open {
+      position: absolute;
+      left: 0;
+      bottom: 87%;
+      width: 100%;
+      height: 42%;
+      opacity: 0;
+      z-index: 2;
+      filter: drop-shadow(0 -4px 8px rgba(0,0,0,0.15));
+      transition: opacity 0.4s ease;
+    }
+    .envelope__flap-open svg { display: block; width: 100%; height: 100%; }
+    .envelope__slot { position: absolute; left: 9%; right: 9%; top: 18%; height: 32%; overflow: hidden; z-index: 1; }
+    .envelope__letter {
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 0;
+      height: 140%;
+      background: #FBF8F2;
+      border: 1px solid rgba(198, 164, 101, 0.45);
+      border-radius: 3px;
+      box-shadow: 0 10px 20px rgba(30, 20, 10, 0.2);
+      transform: translateY(100%);
+      transition: transform 0.65s cubic-bezier(.34,1.56,.64,1) 0.17s;
+    }
+    .envelope__seal {
+      position: absolute;
+      top: 55%;
+      left: 50%;
+      width: clamp(56px, 15vw, 76px);
+      height: clamp(56px, 15vw, 76px);
+      transform: translate(-50%, -50%);
+      z-index: 4;
+      transition: opacity 0.4s ease, transform 0.5s ease;
+    }
+    .envelope__seal img {
+      width: 100%;
+      height: 100%;
+      filter: sepia(1) saturate(3.5) hue-rotate(5deg) brightness(1.25) contrast(1.1) drop-shadow(0 3px 6px rgba(0,0,0,0.35));
+    }
+    .envelope__seal-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Noto Serif Armenian', 'Noto Serif', Georgia, serif;
+      font-size: clamp(13px, 3vw, 16px);
+      letter-spacing: 0.06em;
+      color: rgba(70, 48, 10, 0.75);
+      text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+    }
+    .envelope.is-open { animation: none; }
+    .envelope.is-open .envelope__flap-wrap { opacity: 0; }
+    .envelope.is-open .envelope__flap-open { opacity: 1; }
+    .envelope.is-open .envelope__seal { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+    .envelope.is-open .envelope__letter { transform: translateY(0%); }
+    .intro.is-leaving .envelope { opacity: 0; transition: opacity 0.4s ease; }
+    .intro__hint {
+      position: relative;
+      z-index: 1;
+      font-family: 'Noto Sans Armenian', 'Noto Sans', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      animation: envelopeBreathe 3.6s ease-in-out infinite;
+    }
+    .intro.is-leaving { animation: introLeave 1.2s cubic-bezier(.4,0,.2,1) forwards; }
+    @keyframes introLeave {
+      0%, 78% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .envelope, .intro__hint { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="goldIconGrad" gradientUnits="userSpaceOnUse" x1="10" y1="76" x2="92" y2="6">
+        <stop offset="0" stop-color="#9c7d5b"/>
+        <stop offset="0.42" stop-color="#f0dcc2"/>
+        <stop offset="0.66" stop-color="#cdae8b"/>
+        <stop offset="1" stop-color="#f5e5d0"/>
+      </linearGradient>
+    </defs>
+  </svg>
+  <div id="app">
+
+    <div class="intro" id="intro" hidden>
+      <div class="intro__bg" aria-hidden="true"></div>
+      <div class="intro__bg-fade" aria-hidden="true"></div>
+      <div class="intro__grow" id="introGrow" aria-hidden="true"></div>
+      <button class="envelope" id="envelopeBtn" type="button" aria-label="Բացել հրավերը / Открыть приглашение">
+        <div class="envelope__card">
+          <svg class="envelope__body" viewBox="0 0 300 200" fill="none">
+            <rect x="6" y="26" width="288" height="168" rx="6" fill="#F1ECE3" stroke="#C6A465" stroke-width="1.5"/>
+            <path d="M10 190 150 110 290 190" stroke="#C6A465" stroke-width="1" opacity="0.55"/>
+          </svg>
+        </div>
+        <div class="envelope__slot">
+          <div class="envelope__letter" aria-hidden="true"></div>
+        </div>
+        <div class="envelope__flap-wrap">
+          <svg class="envelope__flap" viewBox="0 0 300 200" fill="none">
+            <path d="M6 26 294 26 150 110 Z" fill="#F1ECE3" stroke="#C6A465" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="envelope__flap-open" aria-hidden="true">
+          <svg viewBox="0 0 300 90" fill="none" preserveAspectRatio="none">
+            <path d="M6 90 150 4 294 90 Z" fill="#F1ECE3" stroke="#C6A465" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="envelope__seal" id="envelopeSeal">
+          <img src="/images/wax-seal.png" alt="">
+          <span class="envelope__seal-text">N&nbsp;&amp;&nbsp;M</span>
+        </div>
+      </button>
+      <p class="intro__hint" data-i18n="intro.hint">Սեղմեք՝ հրավերը բացելու համար</p>
+    </div>
+
+    <div class="monogram-intro" id="monogramIntro" hidden>
+      <div class="monogram-intro__bg" style="background-image:url(/images/couple-1.jpg)" aria-hidden="true"></div>
+      <div class="monogram-intro__scrim" aria-hidden="true"></div>
+      <p class="monogram-intro__names">NAREK <span>&amp;</span> MONIKA</p>
+      <div class="monogram-intro__spacer" aria-hidden="true"></div>
+      <button class="monogram-intro__btn" id="monogramBtn" type="button" data-i18n="intro.open_btn">Բացել</button>
+    </div>
+
+    <button class="lang-toggle" id="langToggle" type="button" aria-label="Փոխել լեզուն / Сменить язык">
+      <span data-lang-current>ՀԱՅ</span><span class="lang-toggle__sep">/</span><span data-lang-other>RUS</span>
+    </button>
+
+    <button class="music-toggle" id="musicToggle" type="button" aria-label="Երաժշտություն / Музыка">
+      <span class="music-toggle__icon" id="musicIcon"></span>
+    </button>
+    <audio id="bgMusic" src="/audio/wedding-song.mp3" loop preload="auto"></audio>
+
+    <div class="page-bg" id="pageBg" aria-hidden="true">
+      <div class="hero__slides" id="heroSlides">
+        <div class="hero__slide" style="background-image:url(/images/couple-1.jpg); background-position: center 25%;"></div>
+        <div class="hero__slide" style="background-image:url(/images/couple-2.jpg); background-position: center center;"></div>
+      </div>
+      <div class="hero__scrim"></div>
+    </div>
+
+    <header class="hero" id="hero">
+      <div class="hero__names-wrap hero__names-wrap--top">
+        <h1 class="hero__names">
+          <span class="hero__name" data-i18n="couple.groom">Նարեկ</span>
+          <span class="hero__amp" aria-hidden="true">&amp;</span>
+          <span class="hero__name" data-i18n="couple.bride">Մոնիկա</span>
+        </h1>
+      </div>
+      <div class="hero__content">
+        <p class="eyebrow eyebrow--light" data-i18n="hero.eyebrow">Հրավիրում ենք Ձեզ մեր հարսանիքին</p>
+        <p class="hero__date">26.10.2026</p>
+      </div>
+
+      <button class="hero__scroll" id="scrollCue" type="button" aria-label="Ոլորել ներքև">
+        <svg width="20" height="32" viewBox="0 0 20 32" fill="none"><rect x="1" y="1" width="18" height="30" rx="9" stroke="currentColor" stroke-width="1.2"/><circle class="hero__scroll-dot" cx="10" cy="10" r="2.4" fill="currentColor"/></svg>
+      </button>
+    </header>
+
+    <main>
+      <section class="section welcome" id="welcome">
+        <div class="container container--narrow" data-reveal>
+          <p class="eyebrow countdown__eyebrow" data-i18n="countdown.eyebrow">Հարսանիքին մնաց</p>
+          <div class="countdown" id="countdown" aria-live="off"><!-- injected by JS --></div>
+          <h2 class="section-title" data-i18n="welcome.title">Սիրելի հյուրեր,</h2>
+          <p class="welcome__text" data-i18n="welcome.text">Ուրախ ենք կիսվել Ձեզ հետ մեր կյանքի ամենագեղեցիկ օրով և սիրով հրավիրում ենք Ձեզ՝ լինել այս հիշարժան պահի մաս։</p>
+          <div class="calendar">
+            <p class="calendar__month" data-i18n="calendar.month">ՀՈԿՏԵՄԲԵՐ 2026</p>
+            <div class="calendar__divider" aria-hidden="true"></div>
+            <div class="calendar__grid" id="calendarGrid"><!-- injected by JS --></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section schedule" id="schedule">
+        <div class="container">
+          <p class="eyebrow" data-reveal data-i18n="schedule.eyebrow">Ծրագիր</p>
+          <h2 class="section-title" data-reveal data-i18n="schedule.title">Օրվա ծրագիրը</h2>
+
+          <ol class="schedule-list" id="timeline"><!-- injected by JS --></ol>
+        </div>
+      </section>
+
+      <section class="section dresscode" id="dresscode">
+        <div class="container container--narrow" data-reveal>
+          <svg class="dresscode__icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="url(#goldIconGrad)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>
+          </svg>
+          <p class="eyebrow" data-i18n="dresscode.eyebrow">Դրես-կոդ</p>
+          <p class="dresscode__text" data-i18n="dresscode.text">Հատուկ դրես-կոդ չկա։ Մենք հարգում ենք Ձեր ընտրությունը և կուրախանանք Ձեզ տեսնել այնպիսին, ինչպիսին Ձեզ հարմար է։</p>
+        </div>
+      </section>
+
+      <section class="section rsvp" id="rsvp">
+        <div class="rsvp__panel">
+          <div class="rsvp__inner" data-reveal>
+            <h2 class="section-title" data-i18n="rsvp.title">Հաստատեք Ձեր ներկայությունը</h2>
+            <p class="rsvp__deadline" data-i18n-html="rsvp.deadline">Խնդրում ենք պատասխանել մինչև <span class="rsvp__deadline-date">հոկտեմբերի 10-ը</span></p>
+
+            <form id="rsvpForm" class="rsvp-form" novalidate>
+              <label class="field">
+                <span class="field__label" data-i18n="rsvp.name_label">Անուն և ազգանուն</span>
+                <input type="text" name="name" id="rsvpName" required autocomplete="name" data-i18n-placeholder="rsvp.name_placeholder" placeholder="Անուն Ազգանուն">
+              </label>
+
+              <fieldset class="field">
+                <legend class="field__label" data-i18n="rsvp.attending_label">Կգա՞ք արդյոք</legend>
+                <div class="choice-group" id="attendingGroup">
+                  <button type="button" class="choice choice--yes is-active" data-value="yes" data-i18n="rsvp.attending_yes">Այո, կգամ</button>
+                  <button type="button" class="choice choice--no" data-value="no" data-i18n="rsvp.attending_no">Ցավոք, չեմ կարողանա</button>
+                </div>
+              </fieldset>
+
+              <fieldset class="field" id="sideField">
+                <div class="field__collapse">
+                  <legend class="field__label" data-i18n="rsvp.side_label">Ո՞ր կողմից եք</legend>
+                  <div class="choice-group" id="sideGroup">
+                    <button type="button" class="choice is-active" data-value="groom" data-i18n="rsvp.side_groom">Փեսայի կողմից</button>
+                    <button type="button" class="choice" data-value="bride" data-i18n="rsvp.side_bride">Հարսի կողմից</button>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="field" id="guestsField">
+                <div class="field__collapse">
+                  <legend class="field__label" data-i18n="rsvp.guests_label">Քանի՞ հոգով եք գալու</legend>
+                  <div class="guest-stepper">
+                    <button type="button" class="guest-stepper__btn" id="guestsMinus" data-i18n-aria="rsvp.guests_decrease" aria-label="Պակասեցնել">−</button>
+                    <span class="guest-stepper__value" id="guestsValue">1</span>
+                    <button type="button" class="guest-stepper__btn" id="guestsPlus" data-i18n-aria="rsvp.guests_increase" aria-label="Ավելացնել">+</button>
+                  </div>
+                </div>
+              </fieldset>
+
+              <p class="form-note" id="formNote" role="alert"></p>
+
+              <button type="submit" class="submit-btn" id="submitBtn">
+                <span data-i18n="rsvp.submit">Ուղարկել պատասխանը</span>
+              </button>
+            </form>
+
+            <div class="rsvp-success" id="rsvpSuccess" hidden>
+              <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>
+              </svg>
+              <p class="rsvp-success__text" id="rsvpSuccessText"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container container--narrow footer__inner" data-reveal>
+        <p class="footer__wish" data-i18n="footer.wish">Սիրով սպասում ենք Ձեզ մեր կյանքի ամենակարևոր օրը</p>
+        <p class="footer__names" data-i18n-html="footer.names">Նարեկ <span class="footer__names-amp">&amp;</span> Մոնիկա</p>
+        <a class="footer__contact" href="tel:+37493885507">
+          <span data-i18n="footer.contact_label">Հարցերի դեպքում զանգահարեք</span>
+          <span class="footer__phone">+374 93 88 55 07</span>
+        </a>
+      </div>
+      <p class="footer__credit">
+        <span data-i18n="footer.credit_text">Ցանկանու՞մ եք նմանատիպ կայք</span>
+        <a href="https://t.me/nemestniy0199" target="_blank" rel="noopener" data-i18n="footer.credit_link">Գրեք ինձ</a>
+      </p>
+    </footer>
+
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
