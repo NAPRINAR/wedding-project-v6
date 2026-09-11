@@ -59,7 +59,7 @@
       opacity: 0;
     }
     .intro.is-opening .envelope__flap-shadow--bottom { opacity: 1; }
-    .envelope__flap { position: absolute; inset: 0; background: #F8F6F1; }
+    .envelope__flap { position: absolute; inset: 0; background: #F1ECE3; }
     .envelope__flap--top { clip-path: url(#flapTopClip); transform-origin: 50% 0%; }
     .envelope__flap--bottom { clip-path: url(#flapBottomClip); transform-origin: 50% 100%; }
     .intro.is-opening .envelope__flap--top { animation: envelopeOpenTop 1.3s cubic-bezier(.65,0,.35,1) forwards; }
@@ -68,7 +68,7 @@
     @keyframes envelopeOpenBottom { to { transform: scaleY(0); } }
     .envelope__seal {
       position: absolute;
-      top: 50%;
+      top: 56%;
       left: 50%;
       width: clamp(90px, 22vw, 130px);
       aspect-ratio: 512 / 351;
@@ -122,10 +122,10 @@
         <stop offset="1" stop-color="#f5e5d0"/>
       </linearGradient>
       <clipPath id="flapTopClip" clipPathUnits="objectBoundingBox">
-        <path d="M0,0 L 1,0 L 1,0.36 L 0.57,0.56 Q 0.5,0.62 0.43,0.56 L 0,0.36 Z"/>
+        <path d="M0,0 L 1,0 L 1,0.36 L 0.54,0.56 Q 0.5,0.58 0.46,0.56 L 0,0.36 Z"/>
       </clipPath>
       <clipPath id="flapBottomClip" clipPathUnits="objectBoundingBox">
-        <path d="M0,1 L 1,1 L 1,0.64 L 0.57,0.44 Q 0.5,0.38 0.43,0.44 L 0,0.64 Z"/>
+        <path d="M0,1 L 1,1 L 1,0.64 L 0.54,0.44 Q 0.5,0.42 0.46,0.44 L 0,0.64 Z"/>
       </clipPath>
     </defs>
   </svg>

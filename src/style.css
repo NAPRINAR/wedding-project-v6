@@ -185,7 +185,7 @@ button { font-family: inherit; }
   opacity: 0;
 }
 .intro.is-opening .envelope__flap-shadow--bottom { opacity: 1; }
-.envelope__flap { position: absolute; inset: 0; background: var(--bg); }
+.envelope__flap { position: absolute; inset: 0; background: var(--bg-soft); }
 .envelope__flap--top { clip-path: url(#flapTopClip); transform-origin: 50% 0%; }
 .envelope__flap--bottom { clip-path: url(#flapBottomClip); transform-origin: 50% 100%; }
 
@@ -196,7 +196,7 @@ button { font-family: inherit; }
 
 .envelope__seal {
   position: absolute;
-  top: 50%;
+  top: 56%;
   left: 50%;
   width: clamp(90px, 22vw, 130px);
   aspect-ratio: 512 / 351;
