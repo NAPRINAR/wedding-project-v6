@@ -87,6 +87,6 @@ export const translations = {
     'footer.names': 'Հայկ <span class="footer__names-amp">&amp;</span> Լիանա',
     'footer.contact_label': 'Հարցերի դեպքում զանգահարեք',
     'footer.credit_text': 'Ցանկանու՞մ եք նմանատիպ կայք',
-    'footer.credit_link': 'Գրեք ինձ',
+    'footer.credit_link': 'Կայքը պատրաստել է Moon Invite-ը',
   },
 };

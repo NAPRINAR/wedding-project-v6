@@ -196,7 +196,7 @@ button { font-family: inherit; }
 
 .envelope__seal {
   position: absolute;
-  top: 56%;
+  top: 54.5%;
   left: 50%;
   width: clamp(90px, 22vw, 130px);
   aspect-ratio: 512 / 351;
@@ -797,6 +797,14 @@ button { font-family: inherit; }
   transition: color .2s ease;
 }
 .footer__credit a:hover { color: var(--gold); }
+.footer__credit-link { animation: creditBlink 1.8s ease-in-out infinite; }
+@keyframes creditBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer__credit-link { animation: none; }
+}
 
 /* ---------- Reveal animation base (GSAP controls final state) ---------- */
 [data-reveal] { opacity: 0; }
