@@ -789,8 +789,7 @@ button { font-family: inherit; }
 }
 .footer__credit a {
   color: var(--ink-soft);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration: none;
   transition: color .2s ease;
 }
 .footer__credit a:hover { color: var(--gold); }
