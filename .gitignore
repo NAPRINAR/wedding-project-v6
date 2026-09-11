@@ -27,6 +27,7 @@ dist-ssr
 *.sw?
 .env*
 
-# Raw camera originals — optimized copies live in public/images; keeping
-# the multi-MB source files out of the repo and out of the deployed build.
+# Raw camera/audio originals — optimized/trimmed copies live in public/;
+# keeping the large source files out of the repo and out of the deployed build.
 /photos-original
+/audio-original
