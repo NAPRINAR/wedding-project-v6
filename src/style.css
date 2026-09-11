@@ -794,7 +794,8 @@ button { font-family: inherit; }
   transition: color .2s ease;
 }
 .footer__credit a:hover { color: var(--gold); }
-.footer__credit-link {
+.footer__credit-brand {
+  display: inline-block;
   color: var(--gold);
   animation: creditBlink 1.8s ease-in-out infinite;
 }
@@ -803,7 +804,7 @@ button { font-family: inherit; }
   50% { opacity: 0.35; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .footer__credit-link { animation: none; }
+  .footer__credit-brand { animation: none; }
 }
 
 /* ---------- Reveal animation base (GSAP controls final state) ---------- */
