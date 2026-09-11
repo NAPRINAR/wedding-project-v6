@@ -19,6 +19,12 @@ export const schedule = [
     mapQuery: 'Եկեղեցի Սուրբ Ամենափրկիչ', // TODO: replace with exact address
   },
   {
+    time: '15:00',
+    am: 'Փեսայի տուն',
+    icon: 'home',
+    mapQuery: 'Ֆուրմանով փողոց, տուն 55, Երևան',
+  },
+  {
     time: '17:00',
     am: 'Հարսանեկան խնջույք, «Imperial» ռեստորանային համալիր',
     icon: 'restaurant',
