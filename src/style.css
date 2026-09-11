@@ -786,18 +786,18 @@ button { font-family: inherit; }
   margin: 0;
   font-size: 11px;
   letter-spacing: 0.04em;
-  color: var(--ink-soft);
-  opacity: 0.65;
 }
 .footer__credit a {
   color: var(--ink-soft);
   text-decoration: underline;
   text-underline-offset: 3px;
-  margin-left: 0.4em;
   transition: color .2s ease;
 }
 .footer__credit a:hover { color: var(--gold); }
-.footer__credit-link { animation: creditBlink 1.8s ease-in-out infinite; }
+.footer__credit-link {
+  color: var(--gold);
+  animation: creditBlink 1.8s ease-in-out infinite;
+}
 @keyframes creditBlink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.35; }
