@@ -1,78 +1,55 @@
 // Google Maps addresses: fill exact addresses in `mapQuery` once provided.
-// Until then, the venue name + city is used as a best-effort search query.
 export const schedule = [
   {
     time: '11:00',
     am: 'Փեսայի տուն',
-    ru: 'Дом жениха',
     icon: 'home',
+    mapQuery: 'Ֆուրմանով փողոց, տուն 55, Երևան',
   },
   {
-    time: '11:30',
-    am: 'Քավորի տուն',
-    ru: 'Дом кавора',
-    icon: 'home',
-  },
-  {
-    time: '12:30',
+    time: '12:00',
     am: 'Հարսի տուն',
-    ru: 'Дом невесты',
     icon: 'home',
+    mapQuery: 'Սողոմոն Թեհլիրյան փողոց 16, Երևան',
   },
   {
     time: '14:00',
     am: 'Եկեղեցի Սուրբ Ամենափրկիչ',
-    ru: 'Церковь Сурб Аменапркич',
     icon: 'church',
     mapQuery: 'Եկեղեցի Սուրբ Ամենափրկիչ', // TODO: replace with exact address
   },
   {
     time: '17:00',
     am: 'Հարսանեկան խնջույք, «Imperial» ռեստորանային համալիր',
-    ru: 'Свадебный банкет, ресторанный комплекс «Imperial»',
     icon: 'restaurant',
     mapQuery: 'Imperial ռեստորանային համալիր', // TODO: replace with exact address
   },
-  {
-    time: '22:00',
-    am: 'Տորտի կտրման արարողություն և հրավառություն',
-    ru: 'Церемония разрезания торта и салют',
-    icon: 'spark',
-  },
-  // Removed for now per request — put back if the "Ավարտ/Завершение" entry
-  // should return.
-  // {
-  //   time: '00:00',
-  //   am: 'Ավարտ',
-  //   ru: 'Завершение',
-  //   icon: 'end',
-  // },
 ];
 
-// Wedding date is Monday, 26.10.2026 — the week is centered on that day.
+// Wedding date is Friday, 25.09.2026 — the week is centered on that day.
 export const calendarDays = [
-  { date: 23, hy: 'Ուրբ', ru: 'Пт' },
-  { date: 24, hy: 'Շբթ', ru: 'Сб' },
-  { date: 25, hy: 'Կիր', ru: 'Вс' },
-  { date: 26, hy: 'Երկ', ru: 'Пн', highlight: true },
-  { date: 27, hy: 'Երք', ru: 'Вт' },
-  { date: 28, hy: 'Չրք', ru: 'Ср' },
-  { date: 29, hy: 'Հնգ', ru: 'Чт' },
+  { date: 22, hy: 'Երք' },
+  { date: 23, hy: 'Չրք' },
+  { date: 24, hy: 'Հնգ' },
+  { date: 25, hy: 'Ուրբ', highlight: true },
+  { date: 26, hy: 'Շբթ' },
+  { date: 27, hy: 'Կիր' },
+  { date: 28, hy: 'Երկ' },
 ];
 
 // Armenia is UTC+4 year-round (no DST), so this is unambiguous for every visitor.
-export const WEDDING_DATE = '2026-10-26T00:00:00+04:00';
+export const WEDDING_DATE = '2026-09-25T00:00:00+04:00';
 
 export const translations = {
   hy: {
-    'couple.bride': 'Մոնիկա',
-    'couple.groom': 'Նարեկ',
+    'couple.bride': 'Լիանա',
+    'couple.groom': 'Հայկ',
     'hero.eyebrow': 'Հրավիրում ենք Ձեզ մեր հարսանիքին',
     'intro.hint': 'Սեղմեք՝ հրավերը բացելու համար',
     'intro.open_btn': 'Բացել հրավերը',
     'welcome.title': 'Սիրելի հյուրեր,',
     'welcome.text': 'Ուրախ ենք կիսվել Ձեզ հետ մեր կյանքի ամենագեղեցիկ օրով և սիրով հրավիրում ենք Ձեզ՝ լինել այս հիշարժան պահի մաս։',
-    'calendar.month': 'ՀՈԿՏԵՄԲԵՐ 2026',
+    'calendar.month': 'ՍԵՊՏԵՄԲԵՐ 2026',
     'countdown.eyebrow': 'Հարսանիքին մնաց',
     'countdown.days': 'օր',
     'countdown.hours': 'ժամ',
@@ -81,11 +58,9 @@ export const translations = {
     'schedule.eyebrow': 'Ծրագիր',
     'schedule.title': 'Օրվա ծրագիրը',
     'schedule.map_btn': 'Բացել Google Maps-ում',
-    'dresscode.eyebrow': 'Դրես-կոդ',
-    'dresscode.text': 'Հատուկ դրես-կոդ չկա։ Մենք հարգում ենք Ձեր ընտրությունը և կուրախանանք Ձեզ տեսնել այնպիսին, ինչպիսին Ձեզ հարմար է։',
     'rsvp.eyebrow': 'RSVP',
     'rsvp.title': 'Հաստատեք Ձեր ներկայությունը',
-    'rsvp.deadline': 'Խնդրում ենք պատասխանել մինչև <span class="rsvp__deadline-date">հոկտեմբերի 10-ը</span>',
+    'rsvp.deadline': 'Խնդրում ենք պատասխանել մինչև <span class="rsvp__deadline-date">սեպտեմբերի 18-ը</span>',
     'rsvp.name_label': 'Անուն և ազգանուն',
     'rsvp.name_placeholder': 'Անուն Ազգանուն',
     'rsvp.attending_label': 'Կգա՞ք արդյոք',
@@ -103,53 +78,9 @@ export const translations = {
     'rsvp.error': 'Չհաջողվեց ուղարկել: Փորձեք կրկին կամ զանգահարեք մեզ։',
     'rsvp.name_required': 'Խնդրում ենք նշել Ձեր անունը',
     'footer.wish': 'Սիրով սպասում ենք Ձեզ մեր կյանքի ամենակարևոր օրը',
-    'footer.names': 'Նարեկ <span class="footer__names-amp">&amp;</span> Մոնիկա',
+    'footer.names': 'Հայկ <span class="footer__names-amp">&amp;</span> Լիանա',
     'footer.contact_label': 'Հարցերի դեպքում զանգահարեք',
     'footer.credit_text': 'Ցանկանու՞մ եք նմանատիպ կայք',
     'footer.credit_link': 'Գրեք ինձ',
-  },
-  ru: {
-    'couple.bride': 'Моника',
-    'couple.groom': 'Нарек',
-    'hero.eyebrow': 'Приглашаем вас на нашу свадьбу',
-    'intro.hint': 'Нажмите, чтобы открыть приглашение',
-    'intro.open_btn': 'Открыть приглашение',
-    'welcome.title': 'Дорогие гости,',
-    'welcome.text': 'Мы рады разделить с вами самый красивый день нашей жизни и с любовью приглашаем вас стать частью этого незабываемого момента.',
-    'calendar.month': 'ОКТЯБРЬ 2026',
-    'countdown.eyebrow': 'До свадьбы осталось',
-    'countdown.days': 'дней',
-    'countdown.hours': 'часов',
-    'countdown.minutes': 'минут',
-    'countdown.seconds': 'секунд',
-    'schedule.eyebrow': 'Программа',
-    'schedule.title': 'Программа дня',
-    'schedule.map_btn': 'Открыть в Google Maps',
-    'dresscode.eyebrow': 'Дресс-код',
-    'dresscode.text': 'Дресс-кода нет. Мы уважаем ваш выбор и будем рады видеть вас в любом удобном для вас образе.',
-    'rsvp.eyebrow': 'RSVP',
-    'rsvp.title': 'Подтвердите присутствие',
-    'rsvp.deadline': 'Просьба ответить до <span class="rsvp__deadline-date">10 октября</span>',
-    'rsvp.name_label': 'Имя и фамилия',
-    'rsvp.name_placeholder': 'Имя Фамилия',
-    'rsvp.attending_label': 'Сможете прийти?',
-    'rsvp.attending_yes': 'Да, приду',
-    'rsvp.attending_no': 'К сожалению, не смогу',
-    'rsvp.side_label': 'Вы со стороны',
-    'rsvp.side_groom': 'Жениха',
-    'rsvp.side_bride': 'Невесты',
-    'rsvp.guests_label': 'Сколько человек придёт',
-    'rsvp.guests_decrease': 'Уменьшить',
-    'rsvp.guests_increase': 'Увеличить',
-    'rsvp.submit': 'Отправить ответ',
-    'rsvp.submit_sending': 'Отправка...',
-    'rsvp.success': 'Спасибо, {name}! Мы получили ваш ответ.',
-    'rsvp.error': 'Не удалось отправить. Попробуйте ещё раз или позвоните нам.',
-    'rsvp.name_required': 'Пожалуйста, укажите имя',
-    'footer.wish': 'С любовью ждём вас в самый важный день нашей жизни',
-    'footer.names': 'Нарек <span class="footer__names-amp">&amp;</span> Моника',
-    'footer.contact_label': 'По вопросам звоните',
-    'footer.credit_text': 'Хотите такой же сайт?',
-    'footer.credit_link': 'Напишите мне',
   },
 };

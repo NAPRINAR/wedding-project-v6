@@ -62,14 +62,17 @@
      --bg cream reads as near-white and glares at high phone brightness
      after a whole page of dark photo backgrounds. */
   --footer-bg: #E4DDCE;
-  --ink: #3B3542;
-  --ink-soft: #6B637A;
-  --border: rgba(59, 53, 66, 0.14);
+  /* Warm neutral charcoal, not the old purple-slate — matches the warm-gray
+     studio backdrop and navy suit in the couple's photos better than a cool
+     purple tint did. */
+  --ink: #332F2A;
+  --ink-soft: #6E655A;
+  --border: rgba(51, 47, 42, 0.14);
   --gold: #C6A465;
   --gold-soft: #DCC793;
   --icon-gold-gradient: linear-gradient(45deg, #9c7d5b 0%, #f0dcc2 42%, #cdae8b 66%, #f5e5d0 100%);
   --wine: #A85B6B;
-  --overlay-dark: #241F2E;
+  --overlay-dark: #201F1E;
 
   /* Text sitting directly on the shared background photo (no panel behind it) —
      legibility comes from color + shadow, not from blurring or tinting the photo. */
@@ -232,29 +235,6 @@ button { font-family: inherit; }
   .intro__hint, .envelope__seal img { animation: none; }
 }
 
-/* ---------- Language toggle ---------- */
-.lang-toggle {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 9px 16px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.55);
-  background: rgba(36, 31, 46, 0.28);
-  backdrop-filter: blur(6px);
-  color: #fff;
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  cursor: pointer;
-  transition: background 0.25s ease, border-color .25s ease;
-}
-.lang-toggle:hover { background: rgba(36, 31, 46, 0.5); }
-.lang-toggle__sep { opacity: 0.5; }
-
 .music-toggle {
   position: fixed;
   top: 20px;
@@ -267,17 +247,15 @@ button { font-family: inherit; }
   height: 38px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.55);
-  background: rgba(36, 31, 46, 0.28);
+  background: rgba(32, 30, 28, 0.28);
   backdrop-filter: blur(6px);
   color: #fff;
   cursor: pointer;
   transition: background 0.25s ease;
 }
-.music-toggle:hover { background: rgba(36, 31, 46, 0.5); }
+.music-toggle:hover { background: rgba(32, 30, 28, 0.5); }
 .music-toggle__icon { display: flex; }
 .music-toggle__icon svg { width: 16px; height: 16px; }
-.lang-toggle [data-lang-current] { font-weight: 700; }
-.lang-toggle [data-lang-other] { opacity: 0.7; }
 
 /* ---------- Shared fixed background ----------
    One photo + one dark scrim behind the entire page (hero's own slideshow,
@@ -332,8 +310,10 @@ button { font-family: inherit; }
 .hero__scrim {
   position: absolute;
   inset: 0;
+  /* Neutral warm-charcoal tint (not the old purple-black) — sits well over
+     both the warm-gray studio backdrop and the navy suit in the photos. */
   background:
-    linear-gradient(180deg, rgba(24,20,32,0.55) 0%, rgba(24,20,32,0.32) 42%, rgba(24,20,32,0.62) 100%);
+    linear-gradient(180deg, rgba(22,21,20,0.55) 0%, rgba(22,21,20,0.32) 42%, rgba(22,21,20,0.62) 100%);
 }
 .hero__content {
   position: relative;
@@ -600,26 +580,6 @@ button { font-family: inherit; }
 }
 .schedule-card__btn:hover { background: var(--gold-soft); color: #2c2416; border-color: var(--gold-soft); }
 
-/* ---------- Dress code ---------- */
-.dresscode {
-  text-align: center;
-  padding: clamp(80px, 15vw, 160px) 0;
-}
-.dresscode__icon {
-  margin-bottom: 18px;
-  animation: iconFloat 3.4s ease-in-out infinite;
-}
-.dresscode__text {
-  margin: 0 auto;
-  max-width: 36ch;
-  font-family: var(--serif-body);
-  font-style: italic;
-  color: var(--on-photo);
-  text-shadow: var(--on-photo-shadow);
-  line-height: 1.7;
-  font-size: clamp(1.15rem, 2.6vw, 1.5rem);
-}
-
 /* ---------- RSVP ---------- */
 .rsvp {
   display: grid;
@@ -679,7 +639,7 @@ button { font-family: inherit; }
   flex: 1 1 auto;
   padding: 12px 16px;
   border: 1px solid rgba(255,255,255,0.4);
-  background: rgba(20,16,24,0.2);
+  background: rgba(18,17,16,0.2);
   color: var(--on-photo-soft);
   font-size: 13.5px;
   border-radius: 999px;
@@ -708,7 +668,7 @@ button { font-family: inherit; }
   height: 36px;
   border-radius: 50%;
   border: 1px solid rgba(255,255,255,0.4);
-  background: rgba(20,16,24,0.2);
+  background: rgba(18,17,16,0.2);
   color: var(--on-photo);
   font-size: 18px;
   line-height: 1;
@@ -837,10 +797,8 @@ button { font-family: inherit; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 560px) {
-  .lang-toggle { top: 14px; right: 14px; padding: 8px 13px; font-size: 11px; }
   .music-toggle { top: 14px; left: 14px; width: 34px; height: 34px; }
   .section { padding: 56px 0; }
-  .dresscode { padding: 64px 0; }
   .rsvp { padding: 0; }
   .schedule-list { margin-top: 40px; }
   .schedule-card { padding: 46px 0; }
@@ -861,6 +819,5 @@ button { font-family: inherit; }
   html { scroll-behavior: auto; }
   .hero__slide.is-active { transition: opacity 0.6s ease; transform: none; }
   .hero__scroll-dot { animation: none; }
-  .dresscode__icon,
   .calendar__day.is-highlight .calendar__date { animation: none; }
 }

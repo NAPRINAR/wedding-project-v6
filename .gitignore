@@ -26,3 +26,7 @@ dist-ssr
 *.sln
 *.sw?
 .env*
+
+# Raw camera originals — optimized copies live in public/images; keeping
+# the multi-MB source files out of the repo and out of the deployed build.
+/photos-original

@@ -37,38 +37,15 @@ const iconLocationGold = `<svg class="schedule-card__icon" viewBox="0 0 100 80" 
   <path d="M50 70 C50 70 28 44 28 30 A22 22 0 1 1 72 30 C72 44 50 70 50 70 Z M50 42 C43 35.5 35.5 31.5 35.5 25 C35.5 20.8 38.8 17.5 43 17.5 C46 17.5 48.6 19.4 50 22 C51.4 19.4 54 17.5 57 17.5 C61.2 17.5 64.5 20.8 64.5 25 C64.5 31.5 57 35.5 50 42 Z" fill="url(#goldIconGrad)" fill-rule="evenodd"/>
 </svg>`;
 
-const iconCake = `<svg class="schedule-card__icon" viewBox="29 8 42 55" fill="none">
-  <g transform="translate(0 2)">
-    <path d="M44 10 Q50 7.4 56 10 L56 23 Q50 25.6 44 23 Z" fill="url(#goldIconGrad)" stroke="url(#goldIconGrad)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M44.5 17 Q47.3 19.6 50.0 17" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-    <path d="M50.0 17 Q52.8 19.6 55.5 17" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-    <path d="M44 14 L56 14" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-    <path d="M39 23 Q50 20.4 61 23 L61 39 Q50 41.6 39 39 Z" fill="url(#goldIconGrad)" stroke="url(#goldIconGrad)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M40.0 32 Q43.3 35 46.7 32" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-    <path d="M46.7 32 Q50.0 35 53.3 32" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-    <path d="M53.3 32 Q56.7 35 60.0 32" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-    <path d="M39 27 L61 27" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-    <path d="M33 39 Q50 36.4 67 39 L67 57 Q50 59.6 33 57 Z" fill="url(#goldIconGrad)" stroke="url(#goldIconGrad)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M34.5 49 Q39.7 52.6 44.8 49" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-    <path d="M44.8 49 Q50.0 52.6 55.2 49" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-    <path d="M55.2 49 Q60.3 52.6 65.5 49" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-    <path d="M33 43 L67 43" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-  </g>
-</svg>`;
-
 gsap.registerPlugin(ScrollTrigger);
 
-/* ---------------- Language ---------------- */
-const LANG_KEY = 'wedding-lang';
-let lang = localStorage.getItem(LANG_KEY) || 'hy';
-
+/* ---------------- Language ----------------
+   Armenian-only site — no language switcher. */
 function t(key) {
-  return translations[lang][key] ?? translations.hy[key] ?? key;
+  return translations.hy[key] ?? key;
 }
 
 function applyTranslations() {
-  document.documentElement.lang = lang === 'hy' ? 'hy' : 'ru';
-
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     el.textContent = t(el.dataset.i18n);
   });
@@ -82,13 +59,6 @@ function applyTranslations() {
     el.setAttribute('aria-label', t(el.dataset.i18nAria));
   });
 
-  const current = document.querySelector('[data-lang-current]');
-  const other = document.querySelector('[data-lang-other]');
-  if (current && other) {
-    current.textContent = lang === 'hy' ? 'ՀԱՅ' : 'RUS';
-    other.textContent = lang === 'hy' ? 'RUS' : 'ՀԱՅ';
-  }
-
   renderTimeline();
   renderCalendar();
   renderCountdown();
@@ -101,7 +71,7 @@ function renderCalendar() {
     .map(
       (d) => `
         <div class="calendar__day${d.highlight ? ' is-highlight' : ''}">
-          <span class="calendar__wd">${lang === 'hy' ? d.hy : d.ru}</span>
+          <span class="calendar__wd">${d.hy}</span>
           <span class="calendar__date">${d.date}</span>
         </div>`
     )
@@ -138,12 +108,6 @@ function renderCountdown() {
     .join('');
 }
 
-document.getElementById('langToggle').addEventListener('click', () => {
-  lang = lang === 'hy' ? 'ru' : 'hy';
-  localStorage.setItem(LANG_KEY, lang);
-  applyTranslations();
-});
-
 /* ---------------- Schedule ---------------- */
 function mapUrl(query) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
@@ -153,7 +117,7 @@ function renderTimeline() {
   const el = document.getElementById('timeline');
   el.innerHTML = schedule
     .map((item) => {
-      const title = lang === 'hy' ? item.am : item.ru;
+      const title = item.am;
       const btn = item.mapQuery
         ? `<a class="schedule-card__btn" target="_blank" rel="noopener" href="${mapUrl(item.mapQuery)}">
              ${t('schedule.map_btn')}
@@ -162,7 +126,6 @@ function renderTimeline() {
       const icon = item.icon === 'church' ? iconChurch
         : item.icon === 'restaurant' ? iconGlassesGold
         : item.icon === 'home' ? iconLocationGold
-        : item.icon === 'spark' ? iconCake
         : '';
       return `
         <li class="schedule-card">
@@ -455,7 +418,7 @@ function initRsvpForm() {
       const res = await fetch('/api/rsvp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, attending, side, guests, lang }),
+        body: JSON.stringify({ name, attending, side, guests }),
       });
       if (!res.ok) throw new Error('bad response');
 
