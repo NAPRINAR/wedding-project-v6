@@ -102,7 +102,9 @@
       color: #6B637A;
       animation: envelopeHintPulse 2s ease-in-out infinite;
       white-space: nowrap;
+      transition: opacity 0.3s ease;
     }
+    .intro.is-opening .intro__hint { opacity: 0; animation: none; }
     @keyframes envelopeHintPulse {
       0%, 100% { opacity: .45; }
       50% { opacity: 1; }
