@@ -571,6 +571,14 @@ button { font-family: inherit; }
   margin: 0;
   line-height: 1.4;
 }
+.schedule-card__address {
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: var(--on-photo-soft);
+  text-shadow: var(--on-photo-shadow);
+  margin: 6px 0 0;
+}
 .schedule-card__btn {
   margin-top: 18px;
   display: inline-flex;

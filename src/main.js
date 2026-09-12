@@ -118,6 +118,9 @@ function renderTimeline() {
   el.innerHTML = schedule
     .map((item) => {
       const title = item.am;
+      const address = item.address
+        ? `<p class="schedule-card__address">${item.address}</p>`
+        : '';
       const btn = item.mapQuery
         ? `<a class="schedule-card__btn" target="_blank" rel="noopener" href="${mapUrl(item.mapQuery)}">
              ${t('schedule.map_btn')}
@@ -132,6 +135,7 @@ function renderTimeline() {
           ${icon}
           <p class="schedule-card__time">${item.time}</p>
           <p class="schedule-card__title">${title}</p>
+          ${address}
           ${btn}
         </li>`;
     })
