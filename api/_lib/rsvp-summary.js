@@ -8,6 +8,10 @@ export async function getResponses() {
   return raw.map((r) => (typeof r === 'string' ? JSON.parse(r) : r));
 }
 
+export async function clearResponses() {
+  await kv.del('rsvp:responses');
+}
+
 export function summarize(responses) {
   const yes = responses.filter((r) => r.attending === 'yes');
   const no = responses.filter((r) => r.attending === 'no');
