@@ -376,6 +376,7 @@ function initReveals() {
 
 /* ---------------- RSVP form ---------------- */
 function initRsvpForm() {
+  const header = document.getElementById('rsvpHeader');
   const form = document.getElementById('rsvpForm');
   const attendingGroup = document.getElementById('attendingGroup');
   const sideField = document.getElementById('sideField');
@@ -397,6 +398,7 @@ function initRsvpForm() {
   // same thank-you state on return visits instead of the form again.
   const submittedName = localStorage.getItem(RSVP_SUBMITTED_KEY);
   if (submittedName) {
+    header.hidden = true;
     form.hidden = true;
     successBox.hidden = false;
     successText.textContent = t('rsvp.success').replace('{name}', submittedName);
@@ -456,6 +458,7 @@ function initRsvpForm() {
       if (!res.ok) throw new Error('bad response');
 
       localStorage.setItem(RSVP_SUBMITTED_KEY, name);
+      header.hidden = true;
       form.hidden = true;
       successBox.hidden = false;
       successText.textContent = t('rsvp.success').replace('{name}', name);
