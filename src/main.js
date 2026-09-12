@@ -376,6 +376,7 @@ function initReveals() {
 
 /* ---------------- RSVP form ---------------- */
 function initRsvpForm() {
+  const panel = document.querySelector('.rsvp__panel');
   const header = document.getElementById('rsvpHeader');
   const form = document.getElementById('rsvpForm');
   const attendingGroup = document.getElementById('attendingGroup');
@@ -398,6 +399,7 @@ function initRsvpForm() {
   // same thank-you state on return visits instead of the form again.
   const submittedName = localStorage.getItem(RSVP_SUBMITTED_KEY);
   if (submittedName) {
+    panel.classList.add('is-answered');
     header.hidden = true;
     form.hidden = true;
     successBox.hidden = false;
@@ -458,11 +460,24 @@ function initRsvpForm() {
       if (!res.ok) throw new Error('bad response');
 
       localStorage.setItem(RSVP_SUBMITTED_KEY, name);
-      header.hidden = true;
-      form.hidden = true;
-      successBox.hidden = false;
       successText.textContent = t('rsvp.success').replace('{name}', name);
-      gsap.from(successBox, { opacity: 0, y: 16, duration: 0.6, ease: 'power2.out' });
+
+      // Fade the header + form out together, then shrink the panel's
+      // padding and fade the thank-you message in — rather than an
+      // instant cut from "filled form" to "compact message".
+      gsap.to([header, form], {
+        opacity: 0,
+        y: -12,
+        duration: 0.4,
+        ease: 'power2.out',
+        onComplete: () => {
+          header.hidden = true;
+          form.hidden = true;
+          panel.classList.add('is-answered');
+          successBox.hidden = false;
+          gsap.fromTo(successBox, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' });
+        },
+      });
     } catch (err) {
       note.textContent = t('rsvp.error');
       submitBtn.disabled = false;
