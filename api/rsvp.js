@@ -1,10 +1,15 @@
 // Vercel Serverless Function.
-// Requires environment variables TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID,
-// set in the Vercel project dashboard (Settings -> Environment Variables).
-// TELEGRAM_CHAT_ID may hold more than one recipient as a comma-separated
-// list (e.g. "111111111,222222222") to notify several people at once.
-// Also records each response in the connected KV store (Storage tab) so
-// /api/rsvp-stats can show a running tally — see that file.
+//
+// Records each RSVP in up to three independent places — none of them can
+// block a guest's submission on its own:
+//   1. Vercel KV (Storage tab) — the primary store /api/rsvp-stats reads.
+//   2. A Google Sheets Apps Script webhook (GOOGLE_SHEET_WEBHOOK_URL) — an
+//      easy-to-open spreadsheet backup, optional.
+//   3. Telegram (TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID) — instant
+//      notification, also optional.
+// The guest only ever sees an error if ALL THREE fail (or none are
+// configured) — a Telegram outage, for instance, never blocks a submission
+// that KV or Sheets still recorded.
 // Never commit real values for these — see .env.example.
 
 import { kv } from '@vercel/kv';
@@ -50,73 +55,89 @@ export default async function handler(req, res) {
   const safeLang = lang === 'ru' ? 'ru' : 'hy';
   const safeSide = ['groom', 'bride'].includes(side) ? side : null;
   const safeGuests = Math.min(Math.max(parseInt(guests, 10) || 1, GUESTS_MIN), GUESTS_MAX);
+  const cleanName = name.trim().slice(0, 120);
 
+  const record = {
+    name: cleanName,
+    attending,
+    side: attending === 'yes' ? safeSide : null,
+    guests: attending === 'yes' ? safeGuests : null,
+    time: Date.now(),
+  };
+
+  let kvOk = false;
+  try {
+    await kv.rpush('rsvp:responses', JSON.stringify(record));
+    kvOk = true;
+  } catch (err) {
+    console.error('KV write failed:', err);
+  }
+
+  let sheetsOk = false;
+  const sheetsWebhook = process.env.GOOGLE_SHEET_WEBHOOK_URL;
+  if (sheetsWebhook) {
+    try {
+      const sheetRes = await fetch(sheetsWebhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(record),
+      });
+      sheetsOk = sheetRes.ok;
+      if (!sheetsOk) console.error('Google Sheets webhook error:', await sheetRes.text());
+    } catch (err) {
+      console.error('Google Sheets webhook failed:', err);
+    }
+  }
+
+  let telegramOk = false;
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatIds = (process.env.TELEGRAM_CHAT_ID ?? '')
     .split(',')
     .map((id) => id.trim())
     .filter(Boolean);
 
-  if (!token || !chatIds.length) {
-    console.error('Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID env vars');
-    return res.status(500).json({ error: 'server_not_configured' });
-  }
-
-  const cleanName = name.trim().slice(0, 120);
-  const lines = [
-    '💍 <b>Նոր պատասխան հարսանիքի հրավերին</b>',
-    '',
-    `👤 Անուն: ${escapeHtml(cleanName)}`,
-    `✅ Կգա՞: ${ATTENDING_LABEL[attending][safeLang]}`,
-  ];
-  if (attending === 'yes' && safeSide) {
-    lines.push(`💒 Կողմ: ${SIDE_LABEL[safeSide][safeLang]}`);
-  }
-  if (attending === 'yes') {
-    lines.push(`👥 ${GUESTS_LABEL[safeLang]}: ${safeGuests}`);
-  }
-  const text = lines.join('\n');
-
-  try {
-    await kv.rpush(
-      'rsvp:responses',
-      JSON.stringify({
-        name: cleanName,
-        attending,
-        side: attending === 'yes' ? safeSide : null,
-        guests: attending === 'yes' ? safeGuests : null,
-        time: Date.now(),
-      })
-    );
-  } catch (err) {
-    // Don't fail the guest's submission just because the tally couldn't be
-    // recorded — the Telegram message below is still the primary channel.
-    console.error('KV write failed:', err);
-  }
-
-  try {
-    const results = await Promise.all(
-      chatIds.map(async (id) => {
-        const tgRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: id, text, parse_mode: 'HTML' }),
-        });
-        if (!tgRes.ok) {
-          console.error(`Telegram API error for chat ${id}:`, await tgRes.text());
-        }
-        return tgRes.ok;
-      })
-    );
-
-    if (!results.some(Boolean)) {
-      // Only fail the request if EVERY recipient failed — one bad chat_id
-      // shouldn't block the guest's response from reaching the others.
-      return res.status(502).json({ error: 'telegram_failed' });
+  if (token && chatIds.length) {
+    const lines = [
+      '💍 <b>Նոր պատասխան հարսանիքի հրավերին</b>',
+      '',
+      `👤 Անուն: ${escapeHtml(cleanName)}`,
+      `✅ Կգա՞: ${ATTENDING_LABEL[attending][safeLang]}`,
+    ];
+    if (attending === 'yes' && safeSide) {
+      lines.push(`💒 Կողմ: ${SIDE_LABEL[safeSide][safeLang]}`);
     }
-    return res.status(200).json({ ok: true });
-  } catch (err) {
-    console.error('Telegram request failed:', err);
-    return res.status(502).json({ error: 'telegram_failed' });
+    if (attending === 'yes') {
+      lines.push(`👥 ${GUESTS_LABEL[safeLang]}: ${safeGuests}`);
+    }
+    const text = lines.join('\n');
+
+    try {
+      const results = await Promise.all(
+        chatIds.map(async (id) => {
+          const tgRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: id, text, parse_mode: 'HTML' }),
+          });
+          if (!tgRes.ok) {
+            console.error(`Telegram API error for chat ${id}:`, await tgRes.text());
+          }
+          return tgRes.ok;
+        })
+      );
+      telegramOk = results.some(Boolean);
+    } catch (err) {
+      console.error('Telegram request failed:', err);
+    }
+  } else {
+    console.error('Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID env vars — skipping notification');
   }
+
+  if (!kvOk && !sheetsOk && !telegramOk) {
+    // Every channel failed (or none are configured) — the guest's response
+    // genuinely wasn't recorded anywhere, so this is the one case worth
+    // surfacing as an error.
+    return res.status(502).json({ error: 'save_failed' });
+  }
+  return res.status(200).json({ ok: true });
 }
