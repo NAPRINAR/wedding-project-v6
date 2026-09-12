@@ -199,7 +199,7 @@ button { font-family: inherit; }
   top: 54.5%;
   left: 50%;
   width: clamp(130px, 30vw, 180px);
-  aspect-ratio: 602 / 300;
+  aspect-ratio: 512 / 290;
   transform: translate(-50%, -50%);
   z-index: 10;
   pointer-events: none;
