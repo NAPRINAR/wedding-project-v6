@@ -109,8 +109,14 @@ function renderCountdown() {
 }
 
 /* ---------------- Schedule ---------------- */
-function mapUrl(query) {
-  return `https://yandex.com/maps/?text=${encodeURIComponent(query)}`;
+// A verified [lat, lon] pair drops an exact pin; a plain text query just
+// searches, which can drift to the wrong building on ambiguous addresses.
+function mapUrl(item) {
+  if (item.coords) {
+    const [lat, lon] = item.coords;
+    return `https://yandex.com/maps/?whatshere%5Bpoint%5D=${lon},${lat}&whatshere%5Bzoom%5D=17`;
+  }
+  return `https://yandex.com/maps/?text=${encodeURIComponent(item.mapQuery)}`;
 }
 
 function renderTimeline() {
@@ -121,8 +127,8 @@ function renderTimeline() {
       const address = item.address
         ? `<p class="schedule-card__address">${item.address}</p>`
         : '';
-      const btn = item.mapQuery
-        ? `<a class="schedule-card__btn" target="_blank" rel="noopener" href="${mapUrl(item.mapQuery)}">
+      const btn = item.mapQuery || item.coords
+        ? `<a class="schedule-card__btn" target="_blank" rel="noopener" href="${mapUrl(item)}">
              ${t('schedule.map_btn')}
            </a>`
         : '';

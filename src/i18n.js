@@ -5,6 +5,7 @@ export const schedule = [
     am: 'Փեսայի տուն',
     icon: 'home',
     address: 'Ֆուրմանովի փող. 55, Գյումրի',
+    coords: [40.790646, 43.840921], // verified exact pin — prefer over mapQuery
     mapQuery: 'Ֆուրմանովի փողոց 55, Գյումրի',
   },
   {
@@ -26,6 +27,7 @@ export const schedule = [
     am: 'Փեսայի տուն',
     icon: 'home',
     address: 'Ֆուրմանովի փող. 55, Գյումրի',
+    coords: [40.790646, 43.840921], // verified exact pin — prefer over mapQuery
     mapQuery: 'Ֆուրմանովի փողոց 55, Գյումրի',
   },
   {
