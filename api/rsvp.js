@@ -10,9 +10,14 @@
 // The guest only ever sees an error if ALL THREE fail (or none are
 // configured) — a Telegram outage, for instance, never blocks a submission
 // that KV or Sheets still recorded.
+//
+// One response per guest: the frontend also locks the form via
+// localStorage once submitted, but the KV write here is keyed by name too
+// (see upsertResponse) so a resubmission — different browser, cleared
+// storage — updates the guest's existing answer instead of duplicating it.
 // Never commit real values for these — see .env.example.
 
-import { kv } from '@vercel/kv';
+import { upsertResponse } from './_lib/rsvp-summary.js';
 
 const ATTENDING_LABEL = {
   yes: { hy: 'Այո, կգա', ru: 'Да, придёт' },
@@ -67,7 +72,10 @@ export default async function handler(req, res) {
 
   let kvOk = false;
   try {
-    await kv.rpush('rsvp:responses', JSON.stringify(record));
+    // Matches by name, so a guest resubmitting (localStorage cleared,
+    // different browser, changed their mind) updates their answer in
+    // place instead of adding a second line to the guest list.
+    await upsertResponse(record);
     kvOk = true;
   } catch (err) {
     console.error('KV write failed:', err);

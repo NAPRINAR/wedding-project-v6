@@ -391,6 +391,17 @@ function initRsvpForm() {
 
   const GUESTS_MIN = 1;
   const GUESTS_MAX = 10;
+  const RSVP_SUBMITTED_KEY = 'wedding-rsvp-submitted';
+
+  // One response per guest (per device/browser) — once submitted, show the
+  // same thank-you state on return visits instead of the form again.
+  const submittedName = localStorage.getItem(RSVP_SUBMITTED_KEY);
+  if (submittedName) {
+    form.hidden = true;
+    successBox.hidden = false;
+    successText.textContent = t('rsvp.success').replace('{name}', submittedName);
+    return;
+  }
 
   let attending = 'yes';
   let side = 'groom';
@@ -444,6 +455,7 @@ function initRsvpForm() {
       });
       if (!res.ok) throw new Error('bad response');
 
+      localStorage.setItem(RSVP_SUBMITTED_KEY, name);
       form.hidden = true;
       successBox.hidden = false;
       successText.textContent = t('rsvp.success').replace('{name}', name);
