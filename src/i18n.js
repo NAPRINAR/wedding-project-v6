@@ -4,31 +4,31 @@ export const schedule = [
     time: '11:00',
     am: 'Փեսայի տուն',
     icon: 'home',
-    mapQuery: 'Ֆուրմանով փողոց, տուն 55, Երևան',
+    mapQuery: 'Ֆուրմանովի փողոց 55, Գյումրի',
   },
   {
     time: '12:00',
     am: 'Հարսի տուն',
     icon: 'home',
-    mapQuery: 'Սողոմոն Թեհլիրյան փողոց 16, Երևան',
+    mapQuery: 'Սողոմոն Թեհլիրյան փողոց 16, Գյումրի',
   },
   {
     time: '14:00',
     am: 'Եկեղեցի Սուրբ Ամենափրկիչ',
     icon: 'church',
-    mapQuery: 'Եկեղեցի Սուրբ Ամենափրկիչ', // TODO: replace with exact address
+    mapQuery: 'Սուրբ Ամենափրկիչ եկեղեցի Գյումրի',
   },
   {
     time: '15:00',
     am: 'Փեսայի տուն',
     icon: 'home',
-    mapQuery: 'Ֆուրմանով փողոց, տուն 55, Երևան',
+    mapQuery: 'Ֆուրմանովի փողոց 55, Գյումրի',
   },
   {
     time: '17:00',
     am: 'Հարսանեկան խնջույք, «Imperial» ռեստորանային համալիր',
     icon: 'restaurant',
-    mapQuery: 'Imperial ռեստորանային համալիր', // TODO: replace with exact address
+    mapQuery: 'Imperial Գյումրի',
   },
 ];
 
