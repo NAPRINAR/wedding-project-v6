@@ -295,7 +295,15 @@ function initIntro(audio) {
   }
 
   intro.hidden = false;
-  document.body.style.overflow = 'hidden';
+  // Plain `overflow: hidden` on body doesn't reliably block scroll on iOS
+  // Safari (the page can still rubber-band/drag underneath a fixed overlay).
+  // Pinning body itself with position:fixed is the technique that actually
+  // holds there. The page is always at the very top when the envelope
+  // shows, so there's no scroll offset to preserve/restore.
+  document.body.style.position = 'fixed';
+  document.body.style.top = '0';
+  document.body.style.left = '0';
+  document.body.style.right = '0';
 
   document.getElementById('envelopeBtn').addEventListener(
     'click',
@@ -310,7 +318,10 @@ function initIntro(audio) {
       // Timeout matches the 1.3s flap animation plus a small buffer.
       setTimeout(() => {
         intro.hidden = true;
-        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
         playHeroEntrance();
       }, 1450);
     },
