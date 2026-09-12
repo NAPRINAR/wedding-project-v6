@@ -216,14 +216,14 @@ function playHeroEntrance() {
   const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
   // Names first — groom's settles down from above, bride's rises up from
   // below, matching how they're stacked, both arriving together ('<').
-  tl.fromTo('[data-i18n="couple.groom"]', { opacity: 0, y: -nameOffset }, { opacity: 1, y: 0, duration: 1.4 })
-    .fromTo('[data-i18n="couple.bride"]', { opacity: 0, y: nameOffset }, { opacity: 1, y: 0, duration: 1.4 }, '<')
+  tl.fromTo('[data-i18n="couple.groom"]', { opacity: 0, y: -nameOffset }, { opacity: 1, y: 0, duration: 1 })
+    .fromTo('[data-i18n="couple.bride"]', { opacity: 0, y: nameOffset }, { opacity: 1, y: 0, duration: 1 }, '<')
     // Starts only once the names have fully settled, not alongside them.
-    .fromTo('.hero__amp', { opacity: 0 }, { opacity: 1, duration: 0.6 })
+    .fromTo('.hero__amp', { opacity: 0 }, { opacity: 1, duration: 0.4 })
     // Then the invitation line, then the date — one after another.
-    .fromTo('.eyebrow--light', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.9 })
-    .fromTo('.hero__date', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.8 })
-    .fromTo('.hero__scroll', { opacity: 0 }, { opacity: 1, duration: 0.8 }, '-=0.3');
+    .fromTo('.eyebrow--light', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6 })
+    .fromTo('.hero__date', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.55 })
+    .fromTo('.hero__scroll', { opacity: 0 }, { opacity: 1, duration: 0.55 }, '-=0.25');
 }
 
 function initScrollCue() {
