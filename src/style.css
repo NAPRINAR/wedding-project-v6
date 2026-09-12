@@ -765,29 +765,6 @@ button { font-family: inherit; }
   color: var(--gold);
   margin: 0 0.12em;
 }
-.footer__contact {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 6px;
-  text-decoration: none;
-  color: var(--ink-soft);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 18px 36px;
-  transition: border-color .2s ease, background .2s ease;
-}
-.footer__contact:hover { border-color: var(--gold); background: var(--bg-soft); }
-.footer__phone {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 18px;
-  letter-spacing: 0.04em;
-  color: var(--wine);
-  text-transform: none;
-}
 .footer__credit {
   position: absolute;
   left: 0;
@@ -836,7 +813,6 @@ button { font-family: inherit; }
   .footer { min-height: auto; padding: 48px 0 60px; }
   .footer__credit { bottom: 14px; font-size: 10px; }
   .footer__names { margin: 16px 0 28px; }
-  .footer__contact { padding: 14px 28px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -32,7 +32,7 @@ export const schedule = [
     mapQuery: 'Ֆուրմանովի փողոց 55, Գյումրի',
   },
   {
-    time: '17:00',
+    time: '16:30',
     am: '«Imperial» ռեստորանային համալիր',
     icon: 'restaurant',
     address: 'Գյումրի',
@@ -93,7 +93,6 @@ export const translations = {
     'rsvp.name_required': 'Խնդրում ենք նշել Ձեր անունը',
     'footer.wish': 'Սիրով սպասում ենք Ձեզ մեր կյանքի ամենակարևոր օրը',
     'footer.names': 'Հայկ <span class="footer__names-amp">&amp;</span> Լիանա',
-    'footer.contact_label': 'Հարցերի դեպքում զանգահարեք',
     'footer.credit_link': 'Կայքը պատրաստել է <span class="footer__credit-brand">Moon Invite</span>-ը',
   },
 };
