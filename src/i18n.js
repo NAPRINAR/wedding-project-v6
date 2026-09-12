@@ -30,7 +30,7 @@ export const schedule = [
   },
   {
     time: '17:00',
-    am: 'Հարսանեկան խնջույք, «Imperial» ռեստորանային համալիր',
+    am: '«Imperial» ռեստորանային համալիր',
     icon: 'restaurant',
     address: 'Գյումրի',
     mapQuery: 'Imperial Գյումրի',
