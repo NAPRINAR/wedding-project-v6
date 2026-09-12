@@ -13,6 +13,7 @@ export const schedule = [
     am: 'Հարսի տուն',
     icon: 'home',
     address: 'Ս. Թեհլիրյան փող. 16, Գյումրի',
+    coords: [40.764750, 43.851750], // verified exact pin — prefer over mapQuery
     mapQuery: 'Սողոմոն Թեհլիրյան փողոց 16, Գյումրի',
   },
   {
