@@ -297,13 +297,14 @@ function initIntro(audio) {
   intro.hidden = false;
   // Plain `overflow: hidden` on body doesn't reliably block scroll on iOS
   // Safari (the page can still rubber-band/drag underneath a fixed overlay).
-  // Pinning body itself with position:fixed is the technique that actually
-  // holds there. The page is always at the very top when the envelope
-  // shows, so there's no scroll offset to preserve/restore.
-  document.body.style.position = 'fixed';
-  document.body.style.top = '0';
-  document.body.style.left = '0';
-  document.body.style.right = '0';
+  // Blocking the touchmove that drives that drag does hold there — and
+  // unlike pinning body with position:fixed (the previous approach), it
+  // never touches body's layout, so there's nothing for mobile Safari to
+  // re-resolve (dynamic viewport height / address bar) once it's undone.
+  // That resolve was landing right as the envelope opened and made the
+  // hero photo visibly snap to a new size the instant scroll unlocked.
+  const blockTouchScroll = (e) => e.preventDefault();
+  document.addEventListener('touchmove', blockTouchScroll, { passive: false });
 
   document.getElementById('envelopeBtn').addEventListener(
     'click',
@@ -318,10 +319,7 @@ function initIntro(audio) {
       // Timeout matches the 1.3s flap animation plus a small buffer.
       setTimeout(() => {
         intro.hidden = true;
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.left = '';
-        document.body.style.right = '';
+        document.removeEventListener('touchmove', blockTouchScroll);
         playHeroEntrance();
       }, 1450);
     },
