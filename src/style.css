@@ -616,7 +616,7 @@ button { font-family: inherit; }
   padding-bottom: clamp(24px, 4vw, 40px);
   /* Pulls the thank-you message up into the schedule section's own
      bottom spacing, which otherwise leaves a tall empty gap above it. */
-  margin-top: clamp(-96px, -8vw, -48px);
+  margin-top: clamp(-136px, -11vw, -68px);
 }
 .rsvp__inner { width: 100%; max-width: 460px; margin-inline: auto; }
 .rsvp__deadline {
@@ -730,7 +730,7 @@ button { font-family: inherit; }
 .submit-btn:hover { background: var(--wine); color: #fff; }
 .submit-btn:disabled { opacity: 0.6; cursor: wait; }
 
-.rsvp-success { flex-direction: column; align-items: center; text-align: center; gap: 22px; color: var(--gold); }
+.rsvp-success { flex-direction: column; align-items: center; text-align: center; gap: 14px; color: var(--gold); }
 .rsvp-success:not([hidden]) { display: flex; }
 .rsvp-success svg { width: 28px; height: 28px; }
 .rsvp-success__text { color: var(--on-photo); text-shadow: var(--on-photo-shadow); font-family: var(--serif-body); font-style: italic; font-size: 16px; line-height: 1.6; max-width: 34ch; margin: 0; }
@@ -812,7 +812,7 @@ button { font-family: inherit; }
   .music-toggle { top: 14px; left: 14px; width: 34px; height: 34px; }
   .section { padding: 56px 0; }
   .rsvp { padding: 0; }
-  .rsvp__panel.is-answered { margin-top: -80px; }
+  .rsvp__panel.is-answered { margin-top: -110px; }
   .schedule-list { margin-top: 40px; }
   .schedule-card { padding: 46px 0; }
   .choice-group { flex-direction: column; }

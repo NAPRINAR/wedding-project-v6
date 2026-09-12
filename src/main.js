@@ -341,8 +341,17 @@ function initReveals() {
     // there may not be enough scroll room below it to ever complete, which
     // left the footer stuck semi-transparent on some phones. It gets a
     // plain one-time fade instead, which only needs the "start" point.
-    const isLast = el.closest('.footer') !== null;
-    if (isLast) {
+    //
+    // The RSVP panel gets the same treatment for a different reason: its
+    // content (and thus its own height/position) changes shape when the
+    // guest submits — the tall form collapses into a short thank-you
+    // message. A scrub tied to that element's own top position recomputes
+    // against the *new* shape without the scroll position having moved,
+    // which can land back inside the fade window and leave the thank-you
+    // text stuck semi-transparent. A one-time fade only ever plays once,
+    // while the guest is still filling out the form, so it's unaffected.
+    const isOneTimeFade = el.closest('.footer') !== null || el.classList.contains('rsvp__inner');
+    if (isOneTimeFade) {
       gsap.fromTo(
         el,
         { opacity: 0, y: 44 },
