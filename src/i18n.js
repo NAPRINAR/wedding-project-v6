@@ -63,7 +63,7 @@ export const translations = {
     'countdown.seconds': 'վայրկյան',
     'schedule.eyebrow': 'Ծրագիր',
     'schedule.title': 'Օրվա ծրագիրը',
-    'schedule.map_btn': 'Բացել Yandex Maps-ում',
+    'schedule.map_btn': 'Բացել քարտեզում',
     'rsvp.eyebrow': 'RSVP',
     'rsvp.title': 'Հաստատեք Ձեր ներկայությունը',
     'rsvp.deadline': 'Խնդրում ենք պատասխանել մինչև <span class="rsvp__deadline-date">սեպտեմբերի 18-ը</span>',
