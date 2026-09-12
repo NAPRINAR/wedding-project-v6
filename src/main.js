@@ -413,6 +413,14 @@ function initRsvpForm() {
     form.hidden = true;
     successBox.hidden = false;
     successText.textContent = t('rsvp.success').replace('{name}', submittedName);
+    // Same one-time scroll reveal as every other [data-reveal] block —
+    // created here rather than in initReveals() because the box is
+    // display:none (and so has no measurable position) until now.
+    gsap.fromTo(
+      successBox,
+      { opacity: 0, y: 44 },
+      { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', scrollTrigger: { trigger: successBox, start: 'top 92%' } }
+    );
     return;
   }
 
@@ -484,7 +492,10 @@ function initRsvpForm() {
           form.hidden = true;
           panel.classList.add('is-answered');
           successBox.hidden = false;
-          gsap.fromTo(successBox, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' });
+          // Same fade+rise as every other [data-reveal] block, for visual
+          // consistency — just played immediately since the guest is
+          // already looking right at this spot.
+          gsap.fromTo(successBox, { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' });
         },
       });
     } catch (err) {
