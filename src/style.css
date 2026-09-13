@@ -811,6 +811,22 @@ button { font-family: inherit; }
 @media (max-width: 560px) {
   .music-toggle { top: 14px; left: 14px; width: 34px; height: 34px; }
   .section { padding: 56px 0; }
+  /* All 7 days no longer fit one row at phone widths, and flex-wrap was
+     dropping the last day (or two) onto a ragged second line. Turn the
+     row into a one-line horizontal slide instead of wrapping it — the
+     wedding day gets scrolled into view by renderCalendar() in main.js. */
+  .calendar__grid {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    margin: 0 -24px;
+    padding: 0 24px 6px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .calendar__grid::-webkit-scrollbar { display: none; }
+  .calendar__day { flex: 0 0 auto; scroll-snap-align: center; }
   .rsvp { padding: 0; }
   .rsvp__panel.is-answered { margin-top: -55px; }
   .schedule-list { margin-top: 40px; }
