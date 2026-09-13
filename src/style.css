@@ -827,6 +827,18 @@ button { font-family: inherit; }
   .footer__names { margin: 16px 0 28px; }
 }
 
+/* All 7 days only fit one row down to ~400px wide; narrower than that,
+   flex-wrap dropped the last day onto a ragged, off-center second line.
+   Drop that day instead of wrapping it — the wedding day (25) stays
+   comfortably inside the remaining row either way. Below ~350px even 6
+   days no longer fit, so a second, narrower breakpoint drops one more. */
+@media (max-width: 410px) {
+  .calendar__day:last-child { display: none; }
+}
+@media (max-width: 355px) {
+  .calendar__day:nth-last-child(-n+2) { display: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .hero__slide.is-active { transition: opacity 0.6s ease; transform: none; }
