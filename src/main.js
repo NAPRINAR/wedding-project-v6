@@ -76,14 +76,6 @@ function renderCalendar() {
         </div>`
     )
     .join('');
-
-  // On phones the week no longer fits one row, so it scrolls horizontally
-  // instead of wrapping — center the wedding day in that scroller so it's
-  // visible without the guest having to swipe to find it.
-  const highlight = el.querySelector('.is-highlight');
-  if (highlight && window.matchMedia('(max-width: 560px)').matches) {
-    highlight.scrollIntoView({ inline: 'center', block: 'nearest' });
-  }
 }
 
 /* ---------------- Countdown ---------------- */
