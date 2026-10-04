@@ -97,7 +97,9 @@ export default async function handler(req, res) {
     }
   }
 
+  // Telegram notification paused. Restore this block to send RSVP alerts again.
   let telegramOk = false;
+  /*
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatIds = (process.env.TELEGRAM_CHAT_ID ?? '')
     .split(',')
@@ -140,6 +142,7 @@ export default async function handler(req, res) {
   } else {
     console.error('Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID env vars — skipping notification');
   }
+  */
 
   if (!kvOk && !sheetsOk && !telegramOk) {
     // Every channel failed (or none are configured) — the guest's response

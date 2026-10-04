@@ -70,7 +70,7 @@ export default async function handler(req, res) {
 </style>
 </head>
 <body>
-  <h1>RSVP — Հայկ &amp; Լիանա</h1>
+  <h1>RSVP — Դավիթ &amp; Սոնա</h1>
   <p class="sub">Обновляется автоматически при каждом новом ответе на сайте.</p>
   <div class="stats">
     <div class="stat"><b>${responses.length}</b><span>Всего ответов</span></div>

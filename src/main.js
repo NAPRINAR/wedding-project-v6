@@ -402,8 +402,10 @@ function initRsvpForm() {
   const GUESTS_MAX = 10;
   const RSVP_SUBMITTED_KEY = 'wedding-rsvp-submitted';
 
-  // One response per guest (per device/browser) — once submitted, show the
-  // same thank-you state on return visits instead of the form again.
+  // Demo site: a reload always shows the form again. Drop any answer left
+  // from an earlier visit, and restore the block below with real RSVP.
+  localStorage.removeItem(RSVP_SUBMITTED_KEY);
+  /*
   const submittedName = localStorage.getItem(RSVP_SUBMITTED_KEY);
   if (submittedName) {
     panel.classList.add('is-answered');
@@ -411,9 +413,6 @@ function initRsvpForm() {
     form.hidden = true;
     successBox.hidden = false;
     successText.textContent = t('rsvp.success').replace('{name}', submittedName);
-    // Same one-time scroll reveal as every other [data-reveal] block —
-    // created here rather than in initReveals() because the box is
-    // display:none (and so has no measurable position) until now.
     gsap.fromTo(
       successBox,
       { opacity: 0, y: 44 },
@@ -421,6 +420,7 @@ function initRsvpForm() {
     );
     return;
   }
+  */
 
   let attending = 'yes';
   let side = 'groom';
@@ -467,14 +467,16 @@ function initRsvpForm() {
     submitLabel.textContent = t('rsvp.submit_sending');
 
     try {
+      // Real submit paused. Restore the fetch to send answers to /api/rsvp again.
+      /*
       const res = await fetch('/api/rsvp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, attending, side, guests }),
       });
       if (!res.ok) throw new Error('bad response');
+      */
 
-      localStorage.setItem(RSVP_SUBMITTED_KEY, name);
       successText.textContent = t('rsvp.success').replace('{name}', name);
 
       // Fade the header + form out together, then shrink the panel's
