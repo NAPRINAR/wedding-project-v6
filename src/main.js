@@ -506,12 +506,85 @@ function initRsvpForm() {
   });
 }
 
+/* ---------------- Autoscroll ----------------
+   Same temporary demo as wedding-anna-karen: a tap on empty space glides
+   down to the RSVP form, pauses, then continues to the bottom. Any wheel,
+   touch, mouse or key press hands control back. Set enabled to false to
+   turn it off. */
+const AUTOSCROLL = { enabled: true, speed: 130, pauseAtFormMs: 2000 };
+
+function initAutoscroll() {
+  if (!AUTOSCROLL.enabled) return;
+  const INTERACTIVE = 'a, button, input, label, select, textarea, [role="group"]';
+  let running = false;
+  let cancel = null;
+  let lastStop = 0;
+
+  const glide = (to) => new Promise((resolve) => {
+    const from = scrollY;
+    const dist = to - from;
+    if (Math.abs(dist) < 2) { resolve(true); return; }
+    const dur = Math.max(800, (Math.abs(dist) / AUTOSCROLL.speed) * 1000);
+    const ease = (k) => 0.5 - Math.cos(Math.PI * k) / 2;
+    const t0 = performance.now();
+    let raf = 0;
+    const step = (now) => {
+      const k = Math.min(1, (now - t0) / dur);
+      scrollTo(0, from + dist * ease(k));
+      if (k < 1) raf = requestAnimationFrame(step); else resolve(true);
+    };
+    raf = requestAnimationFrame(step);
+    cancel = () => { cancelAnimationFrame(raf); resolve(false); };
+  });
+  const pause = (ms) => new Promise((resolve) => {
+    const id = setTimeout(() => resolve(true), ms);
+    cancel = () => { clearTimeout(id); resolve(false); };
+  });
+
+  const stop = () => {
+    if (!running) return;
+    running = false;
+    lastStop = performance.now();
+    cancel?.();
+  };
+
+  async function run() {
+    running = true;
+    // The stylesheet sets scroll-behavior: smooth. Inherited by scrollTo(),
+    // it restarts a smooth animation every frame and the page appears stuck.
+    const root = document.documentElement;
+    const previousBehavior = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
+    try {
+      const maxY = () => document.documentElement.scrollHeight - innerHeight;
+      const formY = Math.min(document.getElementById('rsvp').getBoundingClientRect().top + scrollY, maxY());
+      if (scrollY < formY - 4) {
+        if (!(await glide(formY)) || !running) return;
+        if (!(await pause(AUTOSCROLL.pauseAtFormMs)) || !running) return;
+      }
+      await glide(maxY());
+      running = false;
+    } finally {
+      root.style.scrollBehavior = previousBehavior;
+    }
+  }
+
+  document.addEventListener('click', (e) => {
+    const intro = document.getElementById('intro');
+    if (intro && !intro.hidden) return;
+    if (running || performance.now() - lastStop < 600 || e.target.closest(INTERACTIVE)) return;
+    run();
+  });
+  ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach((ev) => addEventListener(ev, stop, { passive: true, capture: true }));
+}
+
 /* ---------------- Init ---------------- */
 applyTranslations();
 initSlideshow('.hero__slide', 5000);
 initScrollCue();
 initReveals();
 initRsvpForm();
+initAutoscroll();
 initIntro(initMusic());
 setInterval(renderCountdown, 1000);
 
